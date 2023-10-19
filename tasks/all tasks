@@ -1,0 +1,38 @@
+# tasks/configure_mongodb.yml
+
+- name: Configure MongoDB
+  template:
+    src: mongodb.conf.j2
+    dest: /etc/mongod.conf
+  notify: Restart MongoDB
+---------------------------------------------------------------------------------
+# tasks/install_mongodb_centos.yml
+
+- name: Install MongoDB on CentOS
+  yum:
+    name: mongodb-org-{{ mongodb_version }}
+    state: present
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+---------------------------------------------------------------------------------
+# tasks/install_mongodb_debian.yml
+- name: Import the public key used by the package management system
+  apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=7F0CEB10 state=present
+
+- name: Install MongoDB on Debian/Ubuntu
+  apt:
+    name: mongodb-org={{ mongodb_version }}
+    state: present
+---------------------------------------------------------------------------------
+# tasks/main.yml
+
+- include_tasks: install_mongodb_centos.yml
+  when: "'centos' in ansible_os_family"
+
+- include_tasks: install_mongodb_debian.yml
+  when: "'debian' in ansible_os_family"
+
+- include_tasks: configure_mongodb.yml
+
+
