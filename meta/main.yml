@@ -1,0 +1,9 @@
+# meta/main.yml
+# meta/main.yml
+
+dependencies:
+        #  - name: geerlingguy.repo-epel
+        # src: https://github.com/geerlingguy/ansible-role-repo-epel
+        # version: {{ mongo.version  }}
+        #tags:
+        # - always
